@@ -1,9 +1,12 @@
+using AgroHub.Api.Configurations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDependencyInjectionConfiguration();
 
 var app = builder.Build();
 

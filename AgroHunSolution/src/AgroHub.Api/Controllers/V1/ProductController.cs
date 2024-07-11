@@ -1,4 +1,5 @@
-﻿using AgroHub.Application.DataTransferObject;
+﻿using AgroHub.Application.IServices;
+using AgroHub.Application.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgroHub.Api.Controllers.V1
@@ -6,34 +7,46 @@ namespace AgroHub.Api.Controllers.V1
     [Route("api/[controller]")]
     public class ProductController : MainController
     {
-        [HttpPost("create")]
-        public IActionResult CreateProduct(ProductDto productDto)
+        private readonly IProductServices _productServices;
+
+        public ProductController(IProductServices productServices)
         {
+            _productServices = productServices;
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateProduct(ProductRequest productRequest)
+        {
+            await _productServices.Add(productRequest);
             return Ok();
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateProduct(ProductDto productDto)
+        public async Task<IActionResult> UpdateProduct(Guid idProduct, ProductRequest productRequest)
         {
-            return Ok();
+            await _productServices.Update(idProduct, productRequest);
+            return null;
         }
 
         [HttpDelete("delete")]
-        public IActionResult DeleteProduct(Guid idProduct)
+        public async Task<IActionResult> DeleteProduct(Guid idProduct)
         {
-            return Ok();
+            await _productServices.Delete(idProduct);
+            return null;
         }
 
         [HttpGet("list-all")]
-        public IActionResult AddProduct()
+        public async Task<IActionResult> GetAllProducts()
         {
-            return Ok();
+            await _productServices.GetAll();
+            return null;
         }
 
         [HttpGet("list-by-filter")]
-        public IActionResult AddProduct(string name)
+        public async Task<IActionResult> GetByFilterNameProduct(string name)
         {
-            return Ok();
+            await _productServices.GetAllByFilter(name);
+            return null;
         }
     }
 }
