@@ -4,7 +4,7 @@ namespace AgroHub.Api.Configurations
 {
     public static class DependencyInjectionConfig
     {
-        public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
+        public static void AddDependencyInjection(this IServiceCollection services)
         {
             if (services == null)
             {

@@ -10,6 +10,7 @@ namespace AgroHub.Infrastructure.IoC
 {
     public static class NativeDependencyInjector
     {
+
         public static void RegisterServices(IServiceCollection services)
         {
             #region Services

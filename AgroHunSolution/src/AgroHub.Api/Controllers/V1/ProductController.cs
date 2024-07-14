@@ -5,7 +5,8 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace AgroHub.Api.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/Product")]
     public class ProductController : MainController
     {
         private readonly IProductServices _productServices;
