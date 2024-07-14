@@ -1,13 +1,15 @@
 ﻿using AgroHub.Application.Request;
+using AgroHub.Application.Response;
+using AgroHub.Domain.Entities;
 
 namespace AgroHub.Application.IServices
 {
     public interface IProductServices
     {
-        Task Add(ProductRequest productRequest);
-        Task Update(Guid idProduct, ProductRequest productRequest);
-        Task Delete(Guid idProduct);
-        Task GetAll();
-        Task GetAllByFilter(string name);
+        Task<ApiResponse<Product>> Add(ProductRequest productRequest);
+        Task<ApiResponse<Product>> Update(Guid idProduct, ProductRequest productRequest);
+        Task<ApiResponse<Product>> Delete(Guid idProduct);
+        Task<ApiResponse<Product>> GetAll();
+        Task<ApiResponse<Product>> GetAllByFilter(string name);
     }
 }
