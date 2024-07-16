@@ -29,6 +29,13 @@ namespace AgroHub.Infrastructure.IoC
             });
             #endregion
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("PolicyAgroHub",
+                    builder => builder.WithOrigins("https://example1.com", "https://example2.com")
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
         }
     }
 }

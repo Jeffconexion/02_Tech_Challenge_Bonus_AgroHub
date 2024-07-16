@@ -14,6 +14,7 @@ var app = builder.Build();
 app.AddSwaggerGen();
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseCors("PolicyAgroHub");
 app.UseLoggingMiddleware();
 app.MapControllers();
 app.Run();
