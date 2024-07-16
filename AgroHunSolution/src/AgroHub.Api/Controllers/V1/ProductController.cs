@@ -1,5 +1,6 @@
 ﻿using AgroHub.Application.IServices;
 using AgroHub.Application.Request;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,10 +11,13 @@ namespace AgroHub.Api.Controllers.V1
     public class ProductController : MainController
     {
         private readonly IProductServices _productServices;
+        IValidator<ProductRequest> _validator;
 
-        public ProductController(IProductServices productServices)
+        public ProductController(IProductServices productServices,
+                                 IValidator<ProductRequest> validator)
         {
             _productServices = productServices;
+            _validator = validator;
         }
 
         /// <summary>
@@ -30,6 +34,13 @@ namespace AgroHub.Api.Controllers.V1
         [SwaggerResponse(500, "If there is an internal server error")]
         public async Task<IActionResult> CreateProduct(ProductRequest productRequest)
         {
+            var validationResult = await _validator.ValidateAsync(productRequest);
+
+            if (validationResult.IsValid is false)
+            {
+                return StatusCode(400, validationResult.ToDictionary());
+            }
+
             var response = await _productServices.Add(productRequest);
             return StatusCode(response.StatusCode, response);
         }

@@ -1,4 +1,6 @@
-﻿using AgroHub.Infrastructure.Logging;
+﻿using AgroHub.Application.Validations;
+using AgroHub.Infrastructure.Logging;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Reflection;
@@ -57,6 +59,14 @@ namespace AgroHub.Api.Configurations
             {
                 LogLevel = LogLevel.Information
             }));
+        }
+
+        public static void AddFluentValidation(this WebApplicationBuilder builder)
+        {
+            #region MyRegion
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateProductRequestValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ProductDtoValidator>();
+            #endregion
         }
     }
 }

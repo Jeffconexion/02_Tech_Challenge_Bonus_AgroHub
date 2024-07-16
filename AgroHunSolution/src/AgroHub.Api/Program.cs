@@ -5,8 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDependencyInjection();
+
 builder.ApiVersionConfig();
 builder.AddLogging();
+builder.AddFluentValidation();
 
 var app = builder.Build();
 app.AddSwaggerGen();

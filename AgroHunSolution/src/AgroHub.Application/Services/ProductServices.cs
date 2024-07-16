@@ -14,7 +14,7 @@ namespace AgroHub.Application.Services
         private readonly HttpResponseUtils _httpResponseUtils;
         private readonly ILogger<ProductServices> _logger;
 
-        public ProductServices(IProductRepository productRepository,                               
+        public ProductServices(IProductRepository productRepository,
                                ILogger<ProductServices> logger)
         {
             _productRepository = productRepository;
