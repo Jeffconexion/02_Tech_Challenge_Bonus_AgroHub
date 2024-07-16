@@ -6,11 +6,11 @@ namespace AgroHub.Application.Response
     public class ApiResponse<T>
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("item")]
+        [JsonPropertyName("data")]
         public T Data { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("items")]
+        [JsonPropertyName("datas")]
         public List<T> Datas { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
