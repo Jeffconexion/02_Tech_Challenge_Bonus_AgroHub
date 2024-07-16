@@ -11,13 +11,10 @@ namespace AgroHub.Api.Controllers.V1
     public class ProductController : MainController
     {
         private readonly IProductServices _productServices;
-        IValidator<ProductRequest> _validator;
 
-        public ProductController(IProductServices productServices,
-                                 IValidator<ProductRequest> validator)
+        public ProductController(IProductServices productServices)
         {
             _productServices = productServices;
-            _validator = validator;
         }
 
         /// <summary>
@@ -32,7 +29,7 @@ namespace AgroHub.Api.Controllers.V1
         [SwaggerResponse(201, "Returns the created product")]
         [SwaggerResponse(400, "If the product data is invalid")]
         [SwaggerResponse(500, "If there is an internal server error")]
-        public async Task<IActionResult> CreateProduct(ProductRequest productRequest)
+        public async Task<IActionResult> CreateProduct(ProductRequest productRequest, [FromServices] IValidator<ProductRequest> _validator)
         {
             var validationResult = await _validator.ValidateAsync(productRequest);
 
@@ -69,7 +66,7 @@ namespace AgroHub.Api.Controllers.V1
         /// <summary>
         /// Deletes a product by its ID.
         /// </summary>
-        /// <param name="idProduct">The ID of the product to delete.</param>
+        /// <param name="idProduct">The ID of the product to delete.</param>        
         /// <returns>A response indicating the result of the delete operation.</returns>
         /// <response code="200">Returns a confirmation that the product was deleted.</response>
         /// <response code="400">If the product ID is invalid.</response>
@@ -90,15 +87,17 @@ namespace AgroHub.Api.Controllers.V1
         /// <summary>
         /// Retrieves all products.
         /// </summary>
+        /// <param page="page">The number of the page.</param>
+        /// <param pageSize="pageSize">The size of my page.</param>
         /// <returns>A response containing a list of products.</returns>
         /// <response code="200">Returns the list of products.</response>
         /// <response code="500">If there is an internal server error.</response>
         [HttpGet("list-all")]
         [SwaggerResponse(200, "Returns the list of products")]
         [SwaggerResponse(500, "If there is an internal server error")]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var response = await _productServices.GetAll();
+            var response = await _productServices.GetAll(page, pageSize);
             return StatusCode(response.StatusCode, response);
         }
 
@@ -106,15 +105,17 @@ namespace AgroHub.Api.Controllers.V1
         /// Retrieves products by filter based on name.
         /// </summary>
         /// <param name="name">The name to filter products by.</param>
+        /// <param page="page">The number of the page.</param>
+        /// <param pageSize="pageSize">The size of my page.</param>
         /// <returns>A response containing filtered products.</returns>
         /// <response code="200">Returns the filtered products.</response>
-        /// <response code="500">If there is an internal server error.</response>
+        /// <response code="500">If there is an internal server error.</response>     
         [HttpGet("list-by-filter")]
         [SwaggerResponse(200, "Returns the filtered products")]
         [SwaggerResponse(500, "If there is an internal server error")]
-        public async Task<IActionResult> GetByFilterNameProduct(string name)
+        public async Task<IActionResult> GetByFilterNameProduct(string name, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var response = await _productServices.GetAllByFilter(name);
+            var response = await _productServices.GetAllByFilter(name, page, pageSize);
             return StatusCode(response.StatusCode, response);
         }
     }

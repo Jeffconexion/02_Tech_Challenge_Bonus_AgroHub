@@ -18,5 +18,11 @@ namespace AgroHub.Infrastructure.Repositories
 
             return products;
         }
+
+        public async Task<int> GetTotalItens()
+        {
+            var totalItens = await Db.Products.CountAsync();
+            return totalItens;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace AgroHub.Application.Response.Page
 {
-    public class Pagination
+    public class Pagination<T>
     {
         [JsonPropertyName("page")]
         public int Page { get; set; }

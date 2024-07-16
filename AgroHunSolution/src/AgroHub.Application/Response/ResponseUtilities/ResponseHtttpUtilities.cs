@@ -1,4 +1,6 @@
-﻿namespace AgroHub.Application.Response.ResponseUtilities
+﻿using AgroHub.Application.Response.Page;
+
+namespace AgroHub.Application.Response.ResponseUtilities
 {
     public class HttpResponseUtils
     {
@@ -47,13 +49,20 @@
             };
         }
 
-        public ApiResponse<T> SuccessfulResponseWithPagination<T>(List<T> data, string message)
+        public ApiResponse<T> SuccessfulResponseWithPagination<T>(List<T> data, int page, int pageSize, int totalItems, int totalPages, string message)
         {
-            // realizar o calculo aqui da paginação.
+            var productPagination = new Pagination<T>()
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                TotalItems = totalItems,
+            };
+
             return new ApiResponse<T>
             {
-                DataList = data,
-                Pagination = null,
+                Datas = data,
+                Pagination = productPagination,
                 Error = null,
                 StatusCode = 200,
                 Success = true,

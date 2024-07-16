@@ -1,6 +1,7 @@
 ﻿using AgroHub.Application.IServices;
 using AgroHub.Application.Request;
 using AgroHub.Application.Response;
+using AgroHub.Application.Response.Page;
 using AgroHub.Application.Response.ResponseUtilities;
 using AgroHub.Domain.Entities;
 using AgroHub.Domain.IRepositories;
@@ -53,7 +54,7 @@ namespace AgroHub.Application.Services
 
                     return _httpResponseUtils.SuccessfulResponseOk(product, "Product successfully deleted!");
                 }
-                _logger.LogInformation($"Product not found: {product.Id}");
+                _logger.LogInformation($"Product not found: {idProduct}");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
             }
             catch (Exception ex)
@@ -63,17 +64,21 @@ namespace AgroHub.Application.Services
             }
         }
 
-        public async Task<ApiResponse<Product>> GetAll()
+        public async Task<ApiResponse<Product>> GetAll(int page, int pageSize)
         {
             try
             {
-                var products = await _productRepository.GetAll();
+                var productList = await _productRepository.GetAll();
 
-                if (products.Any())
+                if (productList.Any())
                 {
-                    _logger.LogInformation($"Products retrieved successfully!, total products: {products.Count}");
+                    var totalItems = await _productRepository.GetTotalItens();
+                    int totalPages = PaginationConfig.GetTotalPages(pageSize, totalItems);
+                    var productPage = PaginationConfig.GetPagination(page, pageSize, productList);
 
-                    return _httpResponseUtils.SuccessfulResponseWithPagination(products, "Products retrieved successfully!");
+                    _logger.LogInformation($"Products retrieved successfully!");
+
+                    return _httpResponseUtils.SuccessfulResponseWithPagination(productPage, page, pageSize, totalItems, totalPages, "Products retrieved successfully!");
                 }
                 _logger.LogInformation("Products not found!");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
@@ -86,17 +91,22 @@ namespace AgroHub.Application.Services
             }
         }
 
-        public async Task<ApiResponse<Product>> GetAllByFilter(string name)
+        public async Task<ApiResponse<Product>> GetAllByFilter(string name, int page, int pageSize)
         {
             try
             {
-                var products = await _productRepository.Search(x => x.Name.Equals(name));
+                var productList = await _productRepository.Search(x => x.Name.Equals(name));
 
-                if (products.Any())
+                if (productList.Any())
                 {
-                    _logger.LogInformation($"Products retrieved successfully!, total products: {products.Count()}");
+                    var totalItems = productList.Count();
+                    int totalPages = PaginationConfig.GetTotalPages(pageSize, totalItems);
+                    var productPage = PaginationConfig.GetPagination(page, pageSize, productList);
 
-                    return _httpResponseUtils.SuccessfulResponseWithPagination(products.ToList(), "Products retrieved successfully!");
+                    _logger.LogInformation($"Products retrieved successfully!");
+
+                    return _httpResponseUtils.SuccessfulResponseWithPagination(productPage, page, pageSize, totalItems, totalPages, "Products retrieved successfully!");
+
                 }
                 _logger.LogInformation("Products not found!");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
