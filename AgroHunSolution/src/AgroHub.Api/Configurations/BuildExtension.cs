@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AgroHub.Infrastructure.Logging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Reflection;
 
 namespace AgroHub.Api.Configurations
 {
-    public static class SwaggerConfig
+    public static class BuildExtension
     {
-        public static void VersionConfig(this WebApplicationBuilder app)
+        public static void ApiVersionConfig(this WebApplicationBuilder app)
         {
             // Adicionar versionamento de API
             app.Services.AddApiVersioning(options =>
@@ -47,6 +48,15 @@ namespace AgroHub.Api.Configurations
                     }
                 });
             }
+        }
+
+        public static void AddLogging(this WebApplicationBuilder builder)
+        {
+            builder.Logging.ClearProviders();
+            builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+            {
+                LogLevel = LogLevel.Information
+            }));
         }
     }
 }

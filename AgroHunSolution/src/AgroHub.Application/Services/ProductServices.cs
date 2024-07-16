@@ -4,6 +4,7 @@ using AgroHub.Application.Response;
 using AgroHub.Application.Response.ResponseUtilities;
 using AgroHub.Domain.Entities;
 using AgroHub.Domain.IRepositories;
+using Microsoft.Extensions.Logging;
 
 namespace AgroHub.Application.Services
 {
@@ -11,12 +12,16 @@ namespace AgroHub.Application.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly HttpResponseUtils _httpResponseUtils;
+        private readonly ILogger<ProductServices> _logger;
 
-        public ProductServices(IProductRepository productRepository)
+        public ProductServices(IProductRepository productRepository,                               
+                               ILogger<ProductServices> logger)
         {
             _productRepository = productRepository;
-            _httpResponseUtils = new HttpResponseUtils();
+            _httpResponseUtils = new HttpResponseUtils(); ;
+            _logger = logger;
         }
+
 
         public async Task<ApiResponse<Product>> Add(ProductRequest productRequest)
         {
@@ -24,10 +29,13 @@ namespace AgroHub.Application.Services
             try
             {
                 await _productRepository.Add(product);
+                _logger.LogInformation($"Product created successfully: {product.Name}");
+
                 return _httpResponseUtils.SuccessfulResponseCreated(product, "Product successfully created!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while creating a product.");
                 return _httpResponseUtils.InternalServerErrorResponse<Product>(ex.Message);
             }
         }
@@ -41,12 +49,16 @@ namespace AgroHub.Application.Services
                 if (product is not null)
                 {
                     await _productRepository.Delete(product.Id);
+                    _logger.LogInformation($"Delete method called for Product ID: {product.Id}");
+
                     return _httpResponseUtils.SuccessfulResponseOk(product, "Product successfully deleted!");
                 }
+                _logger.LogInformation($"Product not found: {product.Id}");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while delete a product.");
                 return _httpResponseUtils.InternalServerErrorResponse<Product>(ex.Message);
             }
         }
@@ -59,13 +71,17 @@ namespace AgroHub.Application.Services
 
                 if (products.Any())
                 {
+                    _logger.LogInformation($"Products retrieved successfully!, total products: {products.Count}");
+
                     return _httpResponseUtils.SuccessfulResponseWithPagination(products, "Products retrieved successfully!");
                 }
+                _logger.LogInformation("Products not found!");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while get all product.");
                 return _httpResponseUtils.InternalServerErrorResponse<Product>(ex.Message);
             }
         }
@@ -78,12 +94,16 @@ namespace AgroHub.Application.Services
 
                 if (products.Any())
                 {
+                    _logger.LogInformation($"Products retrieved successfully!, total products: {products.Count()}");
+
                     return _httpResponseUtils.SuccessfulResponseWithPagination(products.ToList(), "Products retrieved successfully!");
                 }
+                _logger.LogInformation("Products not found!");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while get by filter.");
                 return _httpResponseUtils.InternalServerErrorResponse<Product>(ex.Message);
             }
         }
@@ -105,13 +125,17 @@ namespace AgroHub.Application.Services
                     productRecorded.Unit = product.Unit;
                     productRecorded.Category.Name = product.Category.Name;
                     await _productRepository.Update(productRecorded);
+
+                    _logger.LogInformation($"Product update successfully: {product.Name}");
                     return _httpResponseUtils.SuccessfulResponseOk(product, "Product successfully updated!");
                 }
 
+                _logger.LogInformation("Product not found!");
                 return _httpResponseUtils.NotFoundResponse<Product>("Product not found!");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while update a product.");
                 return _httpResponseUtils.InternalServerErrorResponse<Product>(ex.Message);
             }
         }

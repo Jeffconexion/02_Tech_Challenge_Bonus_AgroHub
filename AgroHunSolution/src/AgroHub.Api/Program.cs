@@ -1,20 +1,17 @@
 using AgroHub.Api.Configurations;
+using AgroHub.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDependencyInjection();
-
-//Api version configuration.
-builder.VersionConfig();
+builder.ApiVersionConfig();
+builder.AddLogging();
 
 var app = builder.Build();
-
-//Api version configuration.
 app.AddSwaggerGen();
-
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseLoggingMiddleware();
 app.MapControllers();
-
 app.Run();
