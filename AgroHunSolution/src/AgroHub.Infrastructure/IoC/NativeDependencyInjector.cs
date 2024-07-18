@@ -29,6 +29,7 @@ namespace AgroHub.Infrastructure.IoC
             });
             #endregion
 
+            #region CORS
             services.AddCors(options =>
             {
                 options.AddPolicy("PolicyAgroHub",
@@ -36,6 +37,11 @@ namespace AgroHub.Infrastructure.IoC
                                       .AllowAnyMethod()
                                       .AllowAnyHeader());
             });
+            #endregion
+
+            #region Memory Cache
+            services.AddMemoryCache();
+            #endregion
         }
     }
 }
