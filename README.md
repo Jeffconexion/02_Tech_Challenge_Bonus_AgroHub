@@ -43,7 +43,7 @@ Para esclarecimento foi desenvolvido o domain storytelling. Esse vai ser o fluxo
 
 Foram adicionados testes de unidades nas principais classes.
 
-![Teste de unidade](AgroHunSolution/imgs/coberturaTests.png)
+![Teste de unidade](AgroHunSolution/imgs/cobertura.png)
 
 # Banco de Dados
 
