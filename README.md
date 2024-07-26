@@ -43,7 +43,7 @@ Para esclarecimento foi desenvolvido o domain storytelling. Esse vai ser o fluxo
 
 Foram adicionados testes de unidades nas principais classes.
 
-![Teste de unidade](https://github.com/Jeffconexion/01_Tech_Challenge_LocalFriendzApi/blob/main/LocalFriendz/imgs/TesteDeUnidade.png)
+![Teste de unidade](AgroHunSolution/imgs/coberturaTests.png)
 
 # Banco de Dados
 
