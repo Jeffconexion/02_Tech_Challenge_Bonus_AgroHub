@@ -10,7 +10,7 @@ A AgriHub é uma empresa dedicada ao comércio agrícola, oferecendo uma platafo
 
 # Domain StoryTelling
 
-Para esclarecimento foi desenvolvido o domain storytelling. Esse vai ser o fluxo da solução LocalFriendzApi
+Para esclarecimento foi desenvolvido o domain storytelling. Esse vai ser o fluxo da solução.
 
 ![ Esse vai ser o fluxo da solução LocalFriendzApi](AgroHunSolution/imgs/domainStoryTelling.png)
 
